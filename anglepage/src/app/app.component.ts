@@ -1,5 +1,6 @@
 // src/app/app.component.ts
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -8,4 +9,16 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'UFO Battle';
+
+  constructor(private router: Router) {}
+
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem('token');
+  }
+
+  logout(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
+    this.router.navigate(['/']);
+  }
 }

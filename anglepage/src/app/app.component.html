@@ -1,12 +1,16 @@
-<!-- src/app/app.component.html -->
 <nav>
   <ul>
     <li><a routerLink="/">Home</a></li>
-    <li><a routerLink="/register">Register</a></li>
-    <li><a routerLink="/login">Login</a></li>
+    <ng-container *ngIf="!isLoggedIn()">
+      <li><a routerLink="/register">Register</a></li>
+      <li><a routerLink="/login">Login</a></li>
+    </ng-container>
     <li><a routerLink="/play">Play</a></li>
     <li><a routerLink="/preferences">Preferences</a></li>
     <li><a routerLink="/records">Records</a></li>
+    <ng-container *ngIf="isLoggedIn()">
+      <li><a href="javascript:void(0)" (click)="logout()">Logout</a></li>
+    </ng-container>
   </ul>
 </nav>
 

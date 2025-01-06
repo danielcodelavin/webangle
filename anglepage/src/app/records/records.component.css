@@ -1,38 +1,65 @@
 /* src/app/records/records.component.css */
 .records-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
-  
-  th, td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  th {
-    background-color: #007bff;
-    color: white;
-  }
-  
-  tr:hover {
-    background-color: #f5f5f5;
-  }
-  
-  .error-message {
-    color: red;
-    text-align: center;
-    margin: 20px 0;
-  }
-  
-  h2 {
-    text-align: center;
-    color: #333;
-  }
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #FBE5BA;  /* Matches your game's theme */
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.table-responsive {
+  background-color: white;
+  border-radius: 6px;
+  padding: 1px;  /* Small padding to maintain rounded corners */
+}
+
+.custom-table {
+  margin-bottom: 0;
+}
+
+.custom-table thead {
+  background-color: #007bff;
+  color: white;
+}
+
+.custom-table th {
+  padding: 15px;
+  border-bottom: none;
+}
+
+.custom-table td {
+  padding: 12px 15px;
+  vertical-align: middle;
+}
+
+.custom-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.score {
+  font-weight: bold;
+  color: #28a745;
+}
+
+.alert {
+  margin-top: 20px;
+  text-align: center;
+}
+
+/* Remove border from last row */
+.custom-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Add some spacing between cells */
+.custom-table th:not(:last-child),
+.custom-table td:not(:last-child) {
+  border-right: 1px solid #dee2e6;
+}

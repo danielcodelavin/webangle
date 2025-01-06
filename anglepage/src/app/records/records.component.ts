@@ -2,13 +2,21 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
+interface Record {
+  username: string;
+  punctuation: number;
+  ufos: number;
+  disposedTime: number;
+  recordDate: number;
+}
+
 @Component({
   selector: 'app-records',
   templateUrl: './records.component.html',
   styleUrls: ['./records.component.css']
 })
 export class RecordsComponent implements OnInit {
-  records: any[] = [];
+  records: Record[] = [];
   errorMessage: string = '';
 
   constructor(private http: HttpClient) { }
@@ -26,9 +34,9 @@ export class RecordsComponent implements OnInit {
 
     const headers = new HttpHeaders().set('Authorization', token);
 
-    this.http.get('http://wd.etsisi.upm.es:10000/records', { headers })
+    this.http.get<Record[]>('http://wd.etsisi.upm.es:10000/records', { headers })
       .subscribe({
-        next: (data: any) => {
+        next: (data) => {
           this.records = data;
         },
         error: (error) => {
@@ -36,5 +44,9 @@ export class RecordsComponent implements OnInit {
           console.error('Records error:', error);
         }
       });
+  }
+
+  formatDate(timestamp: number): string {
+    return new Date(timestamp).toLocaleDateString();
   }
 }

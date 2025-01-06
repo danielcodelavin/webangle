@@ -2,26 +2,34 @@
 <div class="records-container">
   <h2>Game Records</h2>
 
-  <div *ngIf="errorMessage" class="error-message">
+  <div *ngIf="errorMessage" class="alert alert-danger">
     {{ errorMessage }}
   </div>
 
-  <table *ngIf="records.length > 0">
-    <thead>
-      <tr>
-        <th>Score</th>
-        <th>UFOs</th>
-        <th>Time Used</th>
-        <th>Date</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let record of records">
-        <td>{{ record.punctuation }}</td>
-        <td>{{ record.ufos }}</td>
-        <td>{{ record.disposedTime }}s</td>
-        <td>{{ record.recordDate | date:'short' }}</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="table-responsive">
+    <table *ngIf="records.length > 0" class="table table-hover custom-table">
+      <thead>
+        <tr>
+          <th>Player</th>
+          <th>Score</th>
+          <th>UFOs</th>
+          <th>Time Used</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let record of records">
+          <td><strong>{{ record.username }}</strong></td>
+          <td class="score">{{ record.punctuation }}</td>
+          <td>{{ record.ufos }}</td>
+          <td>{{ record.disposedTime }}s</td>
+          <td>{{ formatDate(record.recordDate) }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="records.length === 0 && !errorMessage" class="alert alert-info">
+    No records found
+  </div>
 </div>

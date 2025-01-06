@@ -12,6 +12,7 @@ export class LoginComponent implements OnInit {
   username: string = '';
   password: string = '';
   errorMessage: string = '';
+  successMessage: string = '';
 
   constructor(
     private http: HttpClient,
@@ -19,33 +20,29 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // Check if user is already logged in
     if (localStorage.getItem('token')) {
       this.router.navigate(['/']);
     }
   }
 
   onSubmit() {
-    // Create URLSearchParams for urlencoded format
-    const formData = new URLSearchParams();
-    formData.append('username', this.username);
-    formData.append('password', this.password);
+    // Using query parameters in URL, just like the working example
+    const url = `http://wd.etsisi.upm.es:10000/users/login?username=${encodeURIComponent(this.username)}&password=${encodeURIComponent(this.password)}`;
 
-    this.http.post('http://wd.etsisi.upm.es:10000/users/login',
-      formData.toString(),
-      {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        observe: 'response'
-      }
-    ).subscribe({
+    this.http.get(url, {
+      observe: 'response'
+    }).subscribe({
       next: (response: HttpResponse<any>) => {
         const token = response.headers.get('Authorization');
         if (token) {
           localStorage.setItem('token', token);
-          // Change Login to Logout in the menu - you can use a service for this
-          this.router.navigate(['/']);
+          localStorage.setItem('username', this.username);
+          this.successMessage = 'Login successful!';
+          setTimeout(() => {
+            this.router.navigate(['/']);
+          }, 1000);
+        } else {
+          this.errorMessage = 'Token not found in response';
         }
       },
       error: (error) => {

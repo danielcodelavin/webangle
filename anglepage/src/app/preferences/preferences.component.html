@@ -1,30 +1,31 @@
-<!-- src/app/preferences/preferences.component.html -->
 <div class="preferences-container">
-    <h2>Preferences</h2>
-    
-    <div class="form-group">
-      <label for="ufos">Number of UFOs:</label>
-      <input 
-        type="number" 
-        id="ufos" 
-        [(ngModel)]="numberOfUFOs" 
-        min="1" 
-        max="10">
-    </div>
-  
-    <div class="form-group">
-      <label for="time">Time (seconds):</label>
-      <input 
-        type="number" 
-        id="time" 
-        [(ngModel)]="timeInSeconds" 
-        min="30" 
-        max="180">
-    </div>
-  
-    <div class="buttons">
-      <button (click)="saveLocal()">Save local</button>
-      <button (click)="saveServer()" [disabled]="!isLoggedIn">Save server</button>
-      <button (click)="getFromServer()" [disabled]="!isLoggedIn">Get from server</button>
-    </div>
+  <h2>Game Preferences</h2>
+
+  <div class="form-group">
+    <label for="ufos">Number of UFOs (1-5):</label>
+    <select id="ufos" [(ngModel)]="numberOfUFOs">
+      <option *ngFor="let num of ufoOptions" [value]="num">{{num}}</option>
+    </select>
   </div>
+
+  <div class="form-group">
+    <label for="time">Game Time (seconds):</label>
+    <select id="time" [(ngModel)]="timeInSeconds">
+      <option *ngFor="let time of timeOptions" [value]="time">{{time}}</option>
+    </select>
+  </div>
+
+  <div class="button-group">
+    <button (click)="saveLocal()">Save Locally</button>
+    <button *ngIf="isLoggedIn" (click)="saveServer()">Save to Server</button>
+    <button *ngIf="isLoggedIn" (click)="getFromServer()">Load from Server</button>
+  </div>
+
+  <div *ngIf="successMessage" class="success-message">
+    {{successMessage}}
+  </div>
+
+  <div *ngIf="errorMessage" class="error-message">
+    {{errorMessage}}
+  </div>
+</div>

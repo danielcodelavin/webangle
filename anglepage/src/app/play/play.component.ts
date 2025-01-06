@@ -265,11 +265,21 @@ export class PlayComponent implements OnInit, AfterViewInit {
     clearInterval(this.timeUpdateInterval);
 
     const canvas = this.canvasRef.nativeElement;
-    const selectedTime = this.timeRemaining / 60;
-    this.score = Math.floor(this.score / selectedTime);
-    this.score -= (this.numUfos - 1) * 50;
-    this.score = Math.max(0, this.score);
 
+    // Calculate time-based division factor
+    let timeDivider = 1;
+    const selectedTime = parseInt(localStorage.getItem('playTime') || '60');
+    if (selectedTime === 120) timeDivider = 2;
+    if (selectedTime === 180) timeDivider = 3;
+    
+    // Apply time division
+    this.score = Math.floor(this.score / timeDivider);
+    
+    // Apply UFO penalty: -50 points per UFO beyond the first one
+    const ufosPenalty = (this.numUfos - 1) * 50;
+    this.score = Math.max(0, this.score - ufosPenalty);
+
+    // Draw game over screen
     this.ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
     this.ctx.fillRect(0, 0, canvas.width, canvas.height);
     
@@ -280,20 +290,51 @@ export class PlayComponent implements OnInit, AfterViewInit {
     this.ctx.font = '24px Arial';
     this.ctx.fillText(`Final Score: ${this.score}`, canvas.width / 2, canvas.height / 2 + 50);
 
+    // Only show save option if user is logged in
     const token = localStorage.getItem('token');
     if (token) {
-      const headers = new HttpHeaders().set('Authorization', token);
-      const scoreData = {
-        punctuation: this.score,
-        ufos: this.numUfos,
-        disposedTime: 60 - this.timeRemaining
-      };
+      this.ctx.font = '20px Arial';
+      this.ctx.fillText('Press S to save your score', canvas.width / 2, canvas.height / 2 + 100);
+      
+      // Add event listener for saving score
+      const saveHandler = (e: KeyboardEvent) => {
+        if (e.key.toLowerCase() === 's') {
+          const headers = new HttpHeaders({
+            'Authorization': token,
+            'Content-Type': 'application/x-www-form-urlencoded'
+          });
 
-      this.http.post('http://wd.etsisi.upm.es:10000/records', scoreData, { headers })
-        .subscribe({
-          next: () => console.log('Score saved'),
-          error: (error) => console.error('Error saving score:', error)
-        });
+          // Create URL-encoded form data
+          const formData = new URLSearchParams();
+          formData.append('punctuation', Math.floor(this.score).toString());
+          formData.append('ufos', Math.floor(this.numUfos).toString());
+          formData.append('disposedTime', Math.floor(selectedTime).toString());
+
+          this.http.post('http://wd.etsisi.upm.es:10000/records', 
+            formData.toString(),
+            { headers }
+          ).subscribe({
+              next: () => {
+                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
+                this.ctx.fillRect(0, 0, canvas.width, canvas.height);
+                this.ctx.fillStyle = '#FFFFFF';
+                this.ctx.fillText('Score saved successfully!', canvas.width / 2, canvas.height / 2);
+              },
+              error: (error) => {
+                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
+                this.ctx.fillRect(0, 0, canvas.width, canvas.height);
+                this.ctx.fillStyle = '#FF0000';
+                this.ctx.fillText('Failed to save score. Please try again.', canvas.width / 2, canvas.height / 2);
+                console.error('Error saving score:', error);
+              }
+            });
+          
+          // Remove event listener after saving
+          document.removeEventListener('keydown', saveHandler);
+        }
+      };
+      
+      document.addEventListener('keydown', saveHandler);
     }
   }
 

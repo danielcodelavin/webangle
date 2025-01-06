@@ -1,0 +1,30 @@
+<!-- src/app/preferences/preferences.component.html -->
+<div class="preferences-container">
+    <h2>Preferences</h2>
+    
+    <div class="form-group">
+      <label for="ufos">Number of UFOs:</label>
+      <input 
+        type="number" 
+        id="ufos" 
+        [(ngModel)]="numberOfUFOs" 
+        min="1" 
+        max="10">
+    </div>
+  
+    <div class="form-group">
+      <label for="time">Time (seconds):</label>
+      <input 
+        type="number" 
+        id="time" 
+        [(ngModel)]="timeInSeconds" 
+        min="30" 
+        max="180">
+    </div>
+  
+    <div class="buttons">
+      <button (click)="saveLocal()">Save local</button>
+      <button (click)="saveServer()" [disabled]="!isLoggedIn">Save server</button>
+      <button (click)="getFromServer()" [disabled]="!isLoggedIn">Get from server</button>
+    </div>
+  </div>

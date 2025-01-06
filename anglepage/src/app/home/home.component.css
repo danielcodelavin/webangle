@@ -1,0 +1,40 @@
+/* src/app/home/home.component.css */
+.home-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  text-align: center;
+}
+
+.text-content {
+  margin-bottom: 30px;
+}
+
+h1 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+h2 {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.school-info {
+  color: #777;
+  margin-bottom: 30px;
+}
+
+.image-container {
+  width: 100%;
+  max-width: 1000px;  /* Adjust this value to control maximum image width */
+  margin: 0 auto;
+}
+
+.background-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;  /* Optional: adds rounded corners */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);  /* Optional: adds subtle shadow */
+}

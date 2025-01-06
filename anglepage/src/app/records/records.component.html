@@ -1,0 +1,27 @@
+<!-- src/app/records/records.component.html -->
+<div class="records-container">
+  <h2>Game Records</h2>
+
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <table *ngIf="records.length > 0">
+    <thead>
+      <tr>
+        <th>Score</th>
+        <th>UFOs</th>
+        <th>Time Used</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let record of records">
+        <td>{{ record.punctuation }}</td>
+        <td>{{ record.ufos }}</td>
+        <td>{{ record.disposedTime }}s</td>
+        <td>{{ record.recordDate | date:'short' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

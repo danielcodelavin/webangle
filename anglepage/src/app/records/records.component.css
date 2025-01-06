@@ -1,0 +1,38 @@
+/* src/app/records/records.component.css */
+.records-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  th {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  tr:hover {
+    background-color: #f5f5f5;
+  }
+  
+  .error-message {
+    color: red;
+    text-align: center;
+    margin: 20px 0;
+  }
+  
+  h2 {
+    text-align: center;
+    color: #333;
+  }

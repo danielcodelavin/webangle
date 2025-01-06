@@ -1,0 +1,18 @@
+/* src/app/play/play.component.css */
+.game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #000;
+  }
+  
+  .score-time-display {
+    color: white;
+    margin-bottom: 20px;
+  }
+  
+  canvas {
+    border: 2px solid #333;
+    background-color: #000;
+  }

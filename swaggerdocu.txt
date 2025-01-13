@@ -1,0 +1,350 @@
+users
+Managing application users
+Find out more: http://moodle.upm.es
+
+POST
+/users
+Creates new user in the system. Anybody can do it
+No previous login needed.
+Parameters
+Try it out
+Name	Description
+username *
+string
+(formData)
+identifier to be used as username as login. Maximum of eight (8) characters long
+
+email *
+string
+(formData)
+User email
+password *
+string
+(formData)
+User password to be used during login
+Responses
+Response content type
+
+application/json
+Code	Description
+201	
+successful operation. NO CONTENT
+Headers:
+Name	Description	Type
+Location	Url to new resource	string
+400	
+no username or email or password
+409	
+duplicated user name
+500	
+internal server error
+GET
+/users/login
+Logs user into the system
+User needs to be logged into the system to be allowed to register punctuations. The user gets a token to identify himself. This token should be sent with header Location to any API REST request that needs it. It stays for 10 minutes long. Some other operations (listUserRecords, postNewRecord) renewes the token so it lasts for other 10 minutes
+
+Parameters
+Try it out
+Name	Description
+username *
+string
+(query)
+The user name for login
+password *
+string
+(query)
+The password for login in clear text
+Responses
+Response content type
+
+application/json
+Code	Description
+200	
+successful operation. ATT: It should be NO CONTENT. Instead it contents jwt token as a string so programmer may check authorization header token
+
+Headers:
+Name	Description	Type
+Authorization	jwt token to be sent with any other user operation	string
+400	
+no username or password
+401	
+invalid username/password supplied
+
+500	
+internal server error
+GET
+/users/{username}
+Finds out if username exists in the database
+This endpoint must be used before registering any user in the system, cheking previously if username already exists
+
+Parameters
+Try it out
+Name	Description
+username *
+string
+(path)
+The user name to look for
+Responses
+Response content type
+
+application/json
+Code	Description
+200	
+username to indicate already exists
+404	
+username not found
+500	
+internal server error
+options
+Managing users’ default preferences.
+
+Find out more: http://moodle.upm.es
+
+GET
+/users/{username}/options
+returns an object with all the user's options (number of ufos and disposed time). Just logged users may do it
+
+User needs to be logged in the system to be allowed to ask for his/her preferences stored in the server
+
+Parameters
+Try it out
+Name	Description
+username *
+string
+(path)
+The user name whose default preferences need to be looked for
+Responses
+Response content type
+
+application/json
+Code	Description
+200	
+successful operation
+Example Value
+Model
+{
+  "ufos": 3,
+  "disposedTime": 120
+}
+401	
+no valid token
+404	
+username not found
+500	
+internal server error
+PATCH
+/users/{username}/options
+updates user's register with the detailed preferences (number of ufos to play with and available time)
+
+The user has to send the default preferences he/she has for playing (number of ufos and available time for the game).
+
+Parameters
+Try it out
+Name	Description
+username *
+string
+(path)
+The user name whose preferences are going to be updated
+numufos *
+integer
+(formData)
+Number of ufos that the user wants to display during game
+time *
+integer
+(formData)
+Number of seconds available to finish the game (60, 120, 180)
+
+Responses
+Response content type
+
+application/json
+Code	Description
+201	
+successful operation. NO CONTENT
+400	
+no mandatory parameters provided
+401	
+no valid token
+500	
+internal server error
+records
+Managing player’s punctuations.
+
+Find out more: http://moodle.upm.es
+
+GET
+/records
+Returns top 10 stored recods
+Returns top ten stored records. Returns a json object with user, punctuation, number of ufos used, disposedTime and date in which it was stored. Date is stored as javascript getTime() format, that is EPOCH * 1000 (miliseconds)
+
+Parameters
+Try it out
+No parameters
+
+Responses
+Response content type
+
+application/json
+Code	Description
+200	
+successful operation
+Example Value
+Model
+[
+  {
+    "username": "user1",
+    "punctuation": 425,
+    "ufos": 3,
+    "disposedTime": 120,
+    "recordDate": 1544529600000
+  }
+]
+401	
+no valid token
+500	
+internal server error
+POST
+/records
+Save a new user's record. Just logged users may do it
+
+User sends to this endpoint the punctuation he/she gets at the end of the game, the number of cards he used during the game and the time, in seconds, he/she had for solving the game. If time is zero, it means no time limit.
+
+Parameters
+Try it out
+Name	Description
+punctuation *
+integer($int)
+(formData)
+punctuation the user got playing
+ufos *
+integer($int)
+(formData)
+number of ufos the game was played with
+disposedTime *
+integer($int)
+(formData)
+number of seconds the player had to solve the game.
+Responses
+Response content type
+
+application/json
+Code	Description
+201	
+successful operation. NO CONTENT
+Headers:
+Name	Description	Type
+Location	Url to new resource	string
+400	
+missing parameter
+401	
+no valid token
+500	
+internal server error
+DELETE
+/records
+Delete user records. Just logged users may do it
+
+Deletes every user record. The username is getted from the jwt
+Parameters
+Try it out
+No parameters
+
+Responses
+Response content type
+
+application/json
+Code	Description
+204	
+successful operation. NO CONTENT
+401	
+no valid token
+GET
+/records/{username}
+Returns top 10 user records. Just logged users may do it
+
+Returns top ten stored records for user. Returns a json object with user, punctuation, number of ufos, disposedTime and date in which it was stored. Date is stored as javascript getTime() format, that is EPOCH * 1000 (miliseconds). Just logged users may do it. No paremeters needed. It takes user from jwt
+
+Parameters
+Try it out
+Name	Description
+username *
+string
+(path)
+The user name to look for records
+Responses
+Response content type
+
+application/json
+Code	Description
+200	
+successful operation
+Example Value
+Model
+[
+  {
+    "username": "user1",
+    "punctuation": 425,
+    "ufos": 3,
+    "disposedTime": 120,
+    "recordDate": 1544529600000
+  }
+]
+401	
+no valid token
+500	
+internal server error
+Models
+User{
+username*	string($string)
+example: user1
+username that stored the record
+}
+UserList[UserList{
+username*	string($string)
+example: user1
+username that stored the record
+}]
+Record{
+username*	string($string)
+example: user1
+username that stored the record
+punctuation*	integer($int)
+example: 425
+record stored by the user
+ufos*	integer($int)
+example: 3
+number of ufos the player played with
+disposedTime*	integer($int)
+example: 120
+number of seconds the user got to end the game
+recordDate*	integer($int32)
+example: 1544529600000
+reservation date/time in format javascript getTime()
+
+}
+RecordsList[RecordsList{
+username*	string($string)
+example: user1
+username that stored the record
+punctuation*	integer($int)
+example: 425
+record stored by the user
+ufos*	integer($int)
+example: 3
+number of ufos the player played with
+disposedTime*	integer($int)
+example: 120
+number of seconds the user got to end the game
+recordDate*	integer($int32)
+example: 1544529600000
+reservation date/time in format javascript getTime()
+
+}]
+Options{
+ufos*	integer($int)
+example: 3
+number of ufos the player played with
+disposedTime*	integer($int)
+example: 120
+number of seconds the user got to end the game
+}

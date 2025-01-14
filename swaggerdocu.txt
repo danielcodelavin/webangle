@@ -348,3 +348,61 @@ disposedTime*	integer($int)
 example: 120
 number of seconds the user got to end the game
 }
+
+
+
+messages
+
+GET
+/messages
+Returns last five messages which destination is the current user. If there are less than five, all of them will be returned
+
+Returns last five messages sended to current user from all the other users in the system. Returns an array with json objects with origin, target, message text and date in which it was stored (sended). Date is stored as javascript getTime() format, that is EPOCH * 1000 (miliseconds)
+
+Parameters
+Try it out
+No parameters
+
+Responses
+Response content type
+
+application/json
+Code	Description
+200	
+successful operation
+Example Value
+Model
+[
+  {
+    "msgId": 1234,
+    "origin": "user1",
+    "target": "user2",
+    "text": "This is a message from user1 to user2",
+    "date": 1544529600000
+  }
+]
+401	
+no valid token
+500	
+internal server error
+DELETE
+/messages/{username}
+Delete user messages. Just logged users may do it
+
+Deletes all the messages for current user.
+Parameters
+Try it out
+Name	Description
+username *
+string
+(path)
+The user name whose messages are being deleted
+Responses
+Response content type
+
+application/json
+Code	Description
+204	
+successful operation. NO CONTENT
+401	
+no valid token

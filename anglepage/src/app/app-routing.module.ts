@@ -7,6 +7,7 @@ import { PlayComponent } from './play/play.component';
 import { PreferencesComponent } from './preferences/preferences.component';
 import { RecordsComponent } from './records/records.component';
 import { RegistrationComponent } from './registration/registration.component';
+import { MessagesComponent } from './messages/messages.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -14,7 +15,8 @@ const routes: Routes = [
   { path: 'play', component: PlayComponent },
   { path: 'preferences', component: PreferencesComponent },
   { path: 'records', component: RecordsComponent },
-  { path: 'register', component: RegistrationComponent }
+  { path: 'register', component: RegistrationComponent },
+  { path: 'messages', component: MessagesComponent }
 ];
 
 @NgModule({

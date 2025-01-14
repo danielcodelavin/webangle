@@ -1,0 +1,42 @@
+<!-- src/app/messages/messages.component.html -->
+<div class="messages-container">
+    <h2>Messages</h2>
+  
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+  
+    <div *ngIf="successMessage" class="alert alert-success">
+      {{ successMessage }}
+    </div>
+  
+    <div *ngIf="messages.length > 0" class="messages-list">
+      <div *ngFor="let message of messages" class="message-item">
+        <div class="message-header">
+          <strong>From: {{ message.origin }}</strong>
+          <span class="message-date">{{ formatDate(message.date) }}</span>
+        </div>
+        <div class="message-text">
+          {{ message.text }}
+        </div>
+      </div>
+      
+      <button class="delete-btn" (click)="confirmDelete()">Delete All Messages</button>
+    </div>
+  
+    <div *ngIf="messages.length === 0" class="no-messages">
+      No messages to display
+    </div>
+  
+    <!-- Confirmation Dialog -->
+    <div *ngIf="showConfirmDialog" class="confirm-dialog">
+      <div class="confirm-dialog-content">
+        <h3>Are you sure?</h3>
+        <p>Do you want to delete all messages?</p>
+        <div class="confirm-dialog-buttons">
+          <button (click)="deleteMessages()">Yes</button>
+          <button (click)="cancelDelete()">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
